@@ -121,3 +121,13 @@ D:\homework\csProject\Network\Tetris201770001ver0416\obj\Debug\Tetris201770001.c
 D:\homework\csProject\Network\Tetris201770001ver0416\obj\Debug\Tetris201770001.csproj.CoreCompileInputs.cache
 D:\homework\csProject\Network\Tetris201770001ver0416\obj\Debug\Tetris201770001.exe
 D:\homework\csProject\Network\Tetris201770001ver0416\obj\Debug\Tetris201770001.pdb
+D:\homework\csProject\Network\NetworkTetris\bin\Debug\Tetris201770001.exe.config
+D:\homework\csProject\Network\NetworkTetris\bin\Debug\Tetris201770001.exe
+D:\homework\csProject\Network\NetworkTetris\bin\Debug\Tetris201770001.pdb
+D:\homework\csProject\Network\NetworkTetris\obj\Debug\Tetris201770001.csprojAssemblyReference.cache
+D:\homework\csProject\Network\NetworkTetris\obj\Debug\Tetris201770001.Form1.resources
+D:\homework\csProject\Network\NetworkTetris\obj\Debug\Tetris201770001.Properties.Resources.resources
+D:\homework\csProject\Network\NetworkTetris\obj\Debug\Tetris201770001.csproj.GenerateResource.cache
+D:\homework\csProject\Network\NetworkTetris\obj\Debug\Tetris201770001.csproj.CoreCompileInputs.cache
+D:\homework\csProject\Network\NetworkTetris\obj\Debug\Tetris201770001.exe
+D:\homework\csProject\Network\NetworkTetris\obj\Debug\Tetris201770001.pdb

@@ -352,6 +352,7 @@ namespace Tetris201770001
         }
         #endregion
 
+        #region Event
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             if (isPlay)
@@ -385,19 +386,7 @@ namespace Tetris201770001
             }
             
         }
-        public void CheckGameOver()
-        {
-            if (myGame.CheckGameOver())
-            {
-                if (networkStatus != NetworkStatus.notConnected)
-                {
-                    SendToNetwork("GameOver");
-                    isWin = false;
-                }
-                lastScore = myGame.gameScore;
-                Reset();
-            }
-        }
+       
         private void downTimer_Tick(object sender, EventArgs e)
         {
             if (isPlay)
@@ -405,7 +394,7 @@ namespace Tetris201770001
                 myGame.gameScore++;
                 if (!myGame.MoveDown()) CheckGameOver();
                 if (downTickInterval > 200) downTimer.Interval = downTickInterval--;
-                SendToNetwork(myGame.gameBoard);
+                if(networkStatus != NetworkStatus.notConnected) SendToNetwork(myGame.gameBoard);
                 Invalidate();
             }
         }
@@ -418,7 +407,7 @@ namespace Tetris201770001
                 e.Location.Y <= startButtonRect.Y + startButtonRect.Height))
             {
                 OffController();
-                SendToNetwork("Start");
+                if(networkStatus != NetworkStatus.notConnected) SendToNetwork("Start");
                 isPlay = true;
             }
             
@@ -452,7 +441,7 @@ namespace Tetris201770001
                 }
             }
         }
-
+        #endregion
 
         #region NetWork
 
@@ -562,5 +551,19 @@ namespace Tetris201770001
 
 
         #endregion
+
+        public void CheckGameOver()
+        {
+            if (myGame.CheckGameOver())
+            {
+                if (networkStatus != NetworkStatus.notConnected)
+                {
+                    SendToNetwork("GameOver");
+                    isWin = false;
+                }
+                lastScore = myGame.gameScore;
+                Reset();
+            }
+        }
     }
 }
