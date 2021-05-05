@@ -20,7 +20,7 @@ namespace Tetris201770001
         Server,
         Client
     }
-    public partial class Form1 : Form
+    public partial class NetworkTetris : Form
     {
         Game myGame;
         Game playerGame;
@@ -55,7 +55,7 @@ namespace Tetris201770001
         SolidBrush[] blockBrushes = new SolidBrush[7];
         SolidBrush backgroundBrush = new SolidBrush(Color.FromArgb(255, 30, 30, 40));
 
-        public Form1()
+        public NetworkTetris()
         {
             InitializeComponent();
         }
@@ -150,7 +150,8 @@ namespace Tetris201770001
             DrawBackground(g, boardStartPoint, boardEndPoint);
             DrawBlock(g, boardStartPoint);
             DrawLine(g, boardStartPoint, boardEndPoint);
-            if(networkStatus != NetworkStatus.notConnected)
+
+            if (networkStatus != NetworkStatus.notConnected)
             {
                 DrawBackground(g, playerBoardStartPoint, playerBoardEndPoint);
                 DrawPlayerBoard(g, playerBoardStartPoint);
@@ -449,12 +450,14 @@ namespace Tetris201770001
         {
             OffController();
             OnServer();
+            Invalidate();
         }
 
         private void clientButton_Click(object sender, EventArgs e)
         {
             OffController();
             ConnectToServer();
+            Invalidate();
         }
 
         private void OffController()
@@ -462,6 +465,7 @@ namespace Tetris201770001
             onServerButton.Enabled = false;
             clientButton.Enabled = false;
             ipTextBox.Enabled = false;
+            NetworkTetris.ActiveForm.Focus();
         }
 
         private void OnServer()
@@ -482,6 +486,7 @@ namespace Tetris201770001
             statusTextBox.AppendText("클라이언트와 연결\r\n");
             receiveThread = new Thread(new ThreadStart(ReceiveFromNetwork));
             receiveThread.Start();
+            ipTextBox.Text = "";
         }
 
         private void ConnectToServer()
@@ -495,6 +500,7 @@ namespace Tetris201770001
             statusTextBox.AppendText("서버에 연결됐습니다. \r\n");
             receiveThread = new Thread(new ThreadStart(ReceiveFromNetwork));
             receiveThread.Start();
+            ipTextBox.Text = "";
         }
 
         private void ReceiveFromNetwork()

@@ -1,7 +1,7 @@
 ﻿
 namespace Tetris201770001
 {
-    partial class Form1
+    partial class NetworkTetris
     {
         /// <summary>
         /// 필수 디자이너 변수입니다.
@@ -101,7 +101,7 @@ namespace Tetris201770001
             this.statusTextBox.Size = new System.Drawing.Size(124, 90);
             this.statusTextBox.TabIndex = 4;
             // 
-            // Form1
+            // NetworkTetris
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -112,7 +112,7 @@ namespace Tetris201770001
             this.Controls.Add(this.clientButton);
             this.Controls.Add(this.onServerButton);
             this.Controls.Add(this.scoreLabel);
-            this.Name = "Form1";
+            this.Name = "NetworkTetris";
             this.Text = "테트리스";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
