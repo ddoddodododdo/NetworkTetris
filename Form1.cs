@@ -264,6 +264,7 @@ namespace Tetris201770001
             }
         }
         #endregion
+
         #region DrawOption()
         private void DrawOption(Graphics g)
         {
@@ -342,14 +343,15 @@ namespace Tetris201770001
                 font, brush, EDGE_SIZE_X * Game.CELL_SIZE, (Game.BY) * Game.CELL_SIZE);
 
             g.DrawString("NEXT", font, brush, nextX,  nextY - Game.CELL_SIZE);
-            g.DrawString("HELP", font, brush, nextX, nextY * 10);
+            g.DrawString("HELP", font, brush, nextX, nextY * 9);
             font = new Font("Gill Sans MT", 11, FontStyle.Bold);
-            g.DrawString("MOVE　　↑", font, brush, nextX-10, nextY * 11);
-            g.DrawString("　　　← ↓ →", font, brush, nextX, nextY * 11.5f);
-            g.DrawString("DROP :  Space Bar", font, brush, nextX-10, nextY * 12);
-            g.DrawString("HOLD :  SHIFT", font, brush, nextX - 10, nextY * 12.5f);
-            font = new Font("Gill Sans MT", 11);
-            g.DrawString("   (-100 SCORE)", font, brush, nextX - 10, nextY * 13f);
+            g.DrawString("MOVE　　↑", font, brush, nextX-10, nextY * 10);
+            g.DrawString("　　　← ↓ →", font, brush, nextX, nextY * 10.5f);
+            g.DrawString("DROP :  Space Bar", font, brush, nextX-10, nextY * 11);
+            g.DrawString("HOLD :  SHIFT", font, brush, nextX - 10, nextY * 11.5f);
+            //font = new Font("Gill Sans MT", 11);
+            g.DrawString("   (-100 SCORE)", font, brush, nextX - 10, nextY * 12f);
+            g.DrawString("CHAT : num 1", font, brush, nextX - 10, nextY * 12.5f);
 
             scoreLabel.Location = new Point(EDGE_SIZE_X * Game.CELL_SIZE-10, (EDGE_SIZE_Y * 5) * Game.CELL_SIZE);
             scoreLabel.Text = Convert.ToString(myGame.gameScore);
@@ -359,8 +361,11 @@ namespace Tetris201770001
         #region Event
         private void NetworkTetris_FormClosing(object sender, FormClosingEventArgs e)
         {
-            receiveThread.Abort();
-            socket.Close();
+            if (networkStatus != NetworkStatus.notConnected)
+            {
+                receiveThread.Abort();
+                socket.Close();
+            }
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -390,11 +395,16 @@ namespace Tetris201770001
                         myGame.MoveDrop();
                         CheckGameOver();
                         break;
+                    case Keys.D1:
+                    case Keys.NumPad1:
+                        if (networkStatus != NetworkStatus.notConnected)
+                        {
+                            SendToNetwork("LOL");
+                        }
+                        break;
                 }
-
                 Invalidate();
             }
-            
         }
        
         private void downTimer_Tick(object sender, EventArgs e)
@@ -551,6 +561,10 @@ namespace Tetris201770001
                 {
                     myGame.Attacked();
                 }
+                else if (encodingData.Equals("LOL"))
+                {
+                    statusTextBox.AppendText("상대: 개못함 ㅋㅋ\r\n");
+                }
                 else
                 {
                     int idx = 0;
@@ -614,6 +628,5 @@ namespace Tetris201770001
                 Reset();
             }
         }
-
     }
 }

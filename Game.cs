@@ -19,7 +19,6 @@ namespace Tetris201770001
         public int gameScore;
         public int holdBlockNum;
         
-        BlockValue bval = new BlockValue(); //블럭모양
         public Block now = new Block();
         public Block[] nextBlocks = new Block[3];
 
@@ -92,7 +91,7 @@ namespace Tetris201770001
             {
                 for (int xx = 0; xx < 4; xx++)
                 {
-                    if (bval.blockShape[now.blockNum, now.turn, yy, xx])
+                    if (Block.BLOCK_SHAPE[now.blockNum, now.turn, yy, xx])
                     {
                         gameBoard[now.y + yy, now.x + xx] = true;
                         gameColorBoard[now.y + yy, now.x + xx] = now.blockNum;
@@ -114,7 +113,7 @@ namespace Tetris201770001
             {
                 for (int xx = 0; xx < 4; xx++)
                 {
-                    if (bval.blockShape[now.blockNum, now.turn, yy, xx])
+                    if (Block.BLOCK_SHAPE[now.blockNum, now.turn, yy, xx])
                     {
                         
                         if ((now.x + xx < 0) || (now.x + xx >= BX) || (now.y + yy >= BY) || gameBoard[now.y + yy, now.x + xx])
@@ -162,7 +161,7 @@ namespace Tetris201770001
             {
                 for (int xx = 0; xx < 4; xx++)
                 {
-                    if (bval.blockShape[now.blockNum, now.turn, yy, xx])
+                    if (Block.BLOCK_SHAPE[now.blockNum, now.turn, yy, xx])
                     {
                         if (now.x + xx - 1 < 0|| (now.y + yy >= BY) || gameBoard[now.y + yy, now.x + xx - 1]) return false;
                     }
@@ -176,7 +175,7 @@ namespace Tetris201770001
             {
                 for (int xx = 0; xx < 4; xx++)
                 {
-                    if (bval.blockShape[now.blockNum, now.turn, yy, xx])
+                    if (Block.BLOCK_SHAPE[now.blockNum, now.turn, yy, xx])
                     {
                         if (now.x + xx + 1 >= BX || (now.y + yy >= BY) || gameBoard[now.y + yy, now.x + xx + 1]) return false;
                     }
@@ -190,7 +189,7 @@ namespace Tetris201770001
             {
                 for (int xx = 0; xx < 4; xx++)
                 {
-                    if(bval.blockShape[now.blockNum, now.turn, yy, xx])
+                    if(Block.BLOCK_SHAPE[now.blockNum, now.turn, yy, xx])
                     {
                         if ((now.y + yy + 1 > BY - 1) || gameBoard[now.y + yy + 1, now.x + xx])  return false;
                     }
@@ -206,7 +205,7 @@ namespace Tetris201770001
             {
                 for (int xx = 0; xx < 4; xx++)
                 {
-                    if (bval.blockShape[now.blockNum, now.turn, yy, xx])
+                    if (Block.BLOCK_SHAPE[now.blockNum, now.turn, yy, xx])
                     {
                         if (now.x + xx < 0 || now.x + xx >= BX || now.y + yy - 1 < 0 || (now.y + yy >= BY) 
                             || gameBoard[now.y + yy, now.x + xx]) return false;
@@ -251,7 +250,7 @@ namespace Tetris201770001
                 {
                     for (int xx = 0; xx < 4; xx++)
                     {
-                        if (bval.blockShape[now.blockNum, now.turn, yy, xx])
+                        if (Block.BLOCK_SHAPE[now.blockNum, now.turn, yy, xx])
                         {
                             if (now.y + yy < 0) return 0;
                             if ((now.y + yy + dis > BY - 1) || gameBoard[now.y + yy + dis, now.x + xx]) return dis - 1;
@@ -302,11 +301,11 @@ namespace Tetris201770001
         public bool BlockCheck(int yy, int xx, int block)
         {
             switch (block) {
-                case -1: return bval.blockShape[now.blockNum, now.turn, yy, xx];
-                case 0: return bval.blockShape[nextBlocks[0].blockNum, 0, yy, xx];
-                case 1: return bval.blockShape[nextBlocks[1].blockNum, 0, yy, xx];
-                case 2: return bval.blockShape[nextBlocks[2].blockNum, 0, yy, xx];
-                case 3: return bval.blockShape[holdBlockNum, 0, yy, xx];
+                case -1: return Block.BLOCK_SHAPE[now.blockNum, now.turn, yy, xx];
+                case 0: return Block.BLOCK_SHAPE[nextBlocks[0].blockNum, 0, yy, xx];
+                case 1: return Block.BLOCK_SHAPE[nextBlocks[1].blockNum, 0, yy, xx];
+                case 2: return Block.BLOCK_SHAPE[nextBlocks[2].blockNum, 0, yy, xx];
+                case 3: return Block.BLOCK_SHAPE[holdBlockNum, 0, yy, xx];
                 default: return false;
             }
         }
