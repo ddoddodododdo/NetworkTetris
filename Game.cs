@@ -26,7 +26,7 @@ namespace Tetris201770001
         public bool[,] gameBoard = new bool[BY, BX];
         public int[,] gameColorBoard = new int[BY, BX];
 
-
+        static private Random rand = new Random();
 
         public Game()
         {
@@ -105,7 +105,6 @@ namespace Tetris201770001
             return false;
         }
         #endregion
-
 
         #region Can()
         private bool CanTurn()
@@ -220,8 +219,7 @@ namespace Tetris201770001
 
         public void UseHold()
         {
-            //if (gameScore > 100) gameScore -= 100;
-            gameScore = gameScore >= 100 ? gameScore - 100 : 0;
+            gameScore = (gameScore >= 100) ? gameScore - 100 : 0;
 
             if (holdBlockNum == -1)
             {
@@ -275,7 +273,8 @@ namespace Tetris201770001
                     if (xx == BX - 1)
                     {
                         EraseBlock(yy);
-                        gameScore += point *= 3;
+                        gameScore += point *= 2;
+
                         checker = true;
                     }
                 }
@@ -314,6 +313,33 @@ namespace Tetris201770001
         public Rectangle GetRect(int yy, int xx)
         {
             return new Rectangle((now.x + xx) * CELL_SIZE, (now.y + yy) * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+        }
+
+        public void Attacked()
+        {
+            int toothless = rand.Next(BX);
+
+           for(int yy = 0; yy < BY; yy++)
+           {
+                for(int xx = 0; xx < BX; xx++)
+                {
+                    if (yy == BY - 1)
+                    {
+                        if (xx == toothless)
+                        {
+                            gameBoard[yy, xx] = false;
+                            continue;
+                        }
+                        gameBoard[yy, xx] = true;
+                        gameColorBoard[yy, xx] = 7;
+                    }
+                    else
+                    {
+                        gameBoard[yy, xx] = gameBoard[yy + 1, xx];
+                        gameColorBoard[yy, xx] = gameColorBoard[yy + 1, xx];
+                    }
+                }
+           }
         }
     }
 }

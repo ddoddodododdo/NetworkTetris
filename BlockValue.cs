@@ -8,7 +8,6 @@ namespace Tetris201770001
 {
     class BlockValue
     {
-
         public bool[,,,] blockShape = new bool[7, 4, 4, 4]
         {
             {               //ㅁㅁㅁㅁ

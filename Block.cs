@@ -47,7 +47,7 @@ namespace Tetris201770001
             for (int i = 0; i < bag7.Length; i++) bag7[i] = i; //블럭 넣고
             for(int i = 0; i < bag7.Length; i++)               //섞기
             {
-                num = rand.Next() % bag7.Length;
+                num = rand.Next(bag7.Length);
                 temp = bag7[i];
                 bag7[i] = bag7[num];
                 bag7[num] = temp;

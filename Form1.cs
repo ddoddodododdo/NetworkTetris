@@ -36,6 +36,7 @@ namespace Tetris201770001
         private const int EDGE_SIZE_Y = 2;
         private int downTickInterval = 600;
         private int lastScore = 0;
+        private int attackPoint = 100;
         private int playTime = 0;
         private bool isWin = false;
         private bool putUp = false;
@@ -52,12 +53,13 @@ namespace Tetris201770001
 
 
         NetworkStatus networkStatus = NetworkStatus.notConnected;
-        SolidBrush[] blockBrushes = new SolidBrush[7];
+        SolidBrush[] blockBrushes = new SolidBrush[8];
         SolidBrush backgroundBrush = new SolidBrush(Color.FromArgb(255, 30, 30, 40));
 
         public NetworkTetris()
         {
             InitializeComponent();
+            
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -84,6 +86,7 @@ namespace Tetris201770001
             blockBrushes[4] = new SolidBrush(Color.FromArgb(255, 000, 000));
             blockBrushes[5] = new SolidBrush(Color.FromArgb(000, 200, 000));
             blockBrushes[6] = new SolidBrush(Color.FromArgb(255, 000, 255));
+            blockBrushes[7] = new SolidBrush(Color.FromArgb(200, 200, 200));
         }
         private void SetSize()
         {
@@ -168,7 +171,7 @@ namespace Tetris201770001
                     if (playerBoard[yy, xx])
                     {
                         rect = new Rectangle((xx + startPoint.X) * Game.CELL_SIZE, (yy + startPoint.Y) * Game.CELL_SIZE, Game.CELL_SIZE, Game.CELL_SIZE);
-                        g.FillRectangle(blockBrushes[0], rect);
+                        g.FillRectangle(blockBrushes[7], rect);
                     }
                 }
             }
@@ -354,6 +357,12 @@ namespace Tetris201770001
         #endregion
 
         #region Event
+        private void NetworkTetris_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            receiveThread.Abort();
+            socket.Close();
+        }
+
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             if (isPlay)
@@ -395,7 +404,11 @@ namespace Tetris201770001
                 myGame.gameScore++;
                 if (!myGame.MoveDown()) CheckGameOver();
                 if (downTickInterval > 200) downTimer.Interval = downTickInterval--;
-                if(networkStatus != NetworkStatus.notConnected) SendToNetwork(myGame.gameBoard);
+                if (networkStatus != NetworkStatus.notConnected)
+                {
+                    SendToNetwork(myGame.gameBoard);
+                    AttackCheck();
+                }
                 Invalidate();
             }
         }
@@ -448,14 +461,12 @@ namespace Tetris201770001
 
         private void onServerButton_Click(object sender, EventArgs e)
         {
-            OffController();
             OnServer();
             Invalidate();
         }
 
         private void clientButton_Click(object sender, EventArgs e)
         {
-            OffController();
             ConnectToServer();
             Invalidate();
         }
@@ -465,7 +476,6 @@ namespace Tetris201770001
             onServerButton.Enabled = false;
             clientButton.Enabled = false;
             ipTextBox.Enabled = false;
-            NetworkTetris.ActiveForm.Focus();
         }
 
         private void OnServer()
@@ -474,16 +484,24 @@ namespace Tetris201770001
             ipAdress = Dns.Resolve(Dns.GetHostName()).AddressList[0];
             IPEndPoint endPoint = new IPEndPoint(ipAdress, port);
 
-            ipTextBox.AppendText(ipAdress.ToString());
+            ipTextBox.SelectedText = ipAdress.ToString();
             statusTextBox.AppendText("서버를 열었습니다. \r\n");
 
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             socket.Bind(endPoint);
             socket.Listen(10);
-            socket = socket.Accept();
+            try
+            {
+                socket = socket.Accept();
+            }catch(Exception e) 
+            {
+                statusTextBox.AppendText("연결 실패.\r\n");
+                return;
+            }
 
+            OffController();
             networkStatus = NetworkStatus.Server;
-            statusTextBox.AppendText("클라이언트와 연결\r\n");
+            statusTextBox.AppendText("클라이언트와 연결.\r\n");
             receiveThread = new Thread(new ThreadStart(ReceiveFromNetwork));
             receiveThread.Start();
             ipTextBox.Text = "";
@@ -494,8 +512,16 @@ namespace Tetris201770001
             ipAdress = IPAddress.Parse(ipTextBox.Text);
             IPEndPoint endPoint = new IPEndPoint(ipAdress, port);
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            socket.Connect(endPoint);
+            try
+            {
+                socket.Connect(endPoint);
+            }catch(Exception e)
+            {
+                statusTextBox.AppendText("연결 실패.\r\n");
+                return;
+            }
 
+            OffController();
             networkStatus = NetworkStatus.Client;
             statusTextBox.AppendText("서버에 연결됐습니다. \r\n");
             receiveThread = new Thread(new ThreadStart(ReceiveFromNetwork));
@@ -509,13 +535,21 @@ namespace Tetris201770001
             {
                 int dataLength = socket.Receive(receiveData);
                 encodingData = Encoding.UTF8.GetString(receiveData, 0, dataLength);
-                if (encodingData.Equals("Start")) isPlay = true;
+
+                if (encodingData.Equals("Start"))
+                {
+                    isPlay = true;
+                }
                 else if (encodingData.Equals("GameOver"))
                 {
                     lastScore = myGame.gameScore;
                     isWin = true;
                     Reset();
                     Invalidate();
+                }
+                else if (encodingData.Equals("Attack"))
+                {
+                    myGame.Attacked();
                 }
                 else
                 {
@@ -555,6 +589,15 @@ namespace Tetris201770001
             socket.Send(sendData);
         }
 
+        private void AttackCheck()
+        {
+            if (myGame.gameScore > attackPoint)
+            {
+                SendToNetwork("Attack");
+                attackPoint += 100;
+            }
+        }
+        
 
         #endregion
 
@@ -571,5 +614,6 @@ namespace Tetris201770001
                 Reset();
             }
         }
+
     }
 }
