@@ -36,7 +36,7 @@ namespace Tetris201770001
         private const int EDGE_SIZE_Y = 2;
         private int downTickInterval = 600;
         private int lastScore = 0;
-        private int attackPoint = 100;
+        private int attackPoint;
         private int playTime = 0;
         private bool isWin = false;
         private bool putUp = false;
@@ -74,6 +74,7 @@ namespace Tetris201770001
         {
             myGame = new Game();
             playerGame = new Game();
+            attackPoint = 150;
             downTickInterval = 600;
             isPlay = false;
         } 
@@ -608,7 +609,7 @@ namespace Tetris201770001
             if (myGame.gameScore > attackPoint)
             {
                 SendToNetwork("Attack");
-                attackPoint += 100;
+                attackPoint += 150;
             }
         }
         
