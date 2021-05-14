@@ -59,7 +59,6 @@ namespace Tetris201770001
         public NetworkTetris()
         {
             InitializeComponent();
-            
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -244,7 +243,7 @@ namespace Tetris201770001
             if (myGame.BlockCheck(yy, xx, -1))
             {
                 rect = myGame.GetRect(yy + startPoint.Y, xx + startPoint.X);
-                g.FillRectangle(blockBrushes[myGame.now.blockNum], rect);
+                g.FillRectangle(blockBrushes[myGame.now.shape], rect);
             }
         } 
         private void DrawDropPreView(Graphics g, Point startPoint, int yy, int xx) //Drop 미리보기
@@ -256,7 +255,7 @@ namespace Tetris201770001
                 int dis = myGame.GetFloorDistance();
                 if (dis != 0)
                 {
-                    Color color = blockBrushes[myGame.now.blockNum].Color;
+                    Color color = blockBrushes[myGame.now.shape].Color;
                     Pen gPen = new Pen(color, 2);
                     rect = myGame.GetRect(yy + dis + startPoint.Y, xx + startPoint.X);
                     g.FillRectangle(new SolidBrush(Color.FromArgb(30, color.R, color.G, color.B)), rect);
@@ -319,7 +318,7 @@ namespace Tetris201770001
                                 rect = new Rectangle((xx + startPoint.X) * Game.CELL_SIZE
                                     , (startPoint.Y + yy + 1 + nxt * 5) * Game.CELL_SIZE
                                     , Game.CELL_SIZE, Game.CELL_SIZE);
-                                g.FillRectangle(blockBrushes[myGame.nextBlocks[nxt].blockNum], rect);
+                                g.FillRectangle(blockBrushes[myGame.nextBlocks[nxt].shape], rect);
                             }
                         }
                     }
@@ -401,6 +400,7 @@ namespace Tetris201770001
                         if (networkStatus != NetworkStatus.notConnected)
                         {
                             SendToNetwork("LOL");
+                            statusTextBox.AppendText("나: 개못함 ㅋㅋ\r\n");
                         }
                         break;
                 }
@@ -494,10 +494,10 @@ namespace Tetris201770001
             
             ipAdress = Dns.Resolve(Dns.GetHostName()).AddressList[0];
             IPEndPoint endPoint = new IPEndPoint(ipAdress, port);
-
             ipTextBox.SelectedText = ipAdress.ToString();
             statusTextBox.AppendText("서버를 열었습니다. \r\n");
 
+            
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             socket.Bind(endPoint);
             socket.Listen(10);
@@ -510,12 +510,13 @@ namespace Tetris201770001
                 return;
             }
 
-            OffController();
             networkStatus = NetworkStatus.Server;
-            statusTextBox.AppendText("클라이언트와 연결.\r\n");
             receiveThread = new Thread(new ThreadStart(ReceiveFromNetwork));
             receiveThread.Start();
+
+            statusTextBox.AppendText("클라이언트와 연결.\r\n");
             ipTextBox.Text = "";
+            OffController();
         }
 
         private void ConnectToServer()

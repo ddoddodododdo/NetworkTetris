@@ -12,10 +12,11 @@ namespace Tetris201770001
         public int x;
         public int y;
         public int turn;
-        public int blockNum;
+        public int shape;
         private int bagIndex;
         private int[] bag7 = new int[7];
 
+        //public static readonly bool[,,,] BLOCK_SHAPE; 아래에 있음
         static Random rand = new Random();
 
         public Block()
@@ -29,10 +30,10 @@ namespace Tetris201770001
             x = Game.BX/2 - 2;
             y = 0;
             turn = 0;
-            blockNum = GetBag7();
+            shape = GetBag7();
         }
 
-        public int GetBag7()
+        private int GetBag7()
         {
             if (bagIndex > bag7.Length - 1) {
                 bagIndex = 0;

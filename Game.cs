@@ -91,10 +91,10 @@ namespace Tetris201770001
             {
                 for (int xx = 0; xx < 4; xx++)
                 {
-                    if (Block.BLOCK_SHAPE[now.blockNum, now.turn, yy, xx])
+                    if (Block.BLOCK_SHAPE[now.shape, now.turn, yy, xx])
                     {
                         gameBoard[now.y + yy, now.x + xx] = true;
-                        gameColorBoard[now.y + yy, now.x + xx] = now.blockNum;
+                        gameColorBoard[now.y + yy, now.x + xx] = now.shape;
                     }
                 }
             }
@@ -113,7 +113,7 @@ namespace Tetris201770001
             {
                 for (int xx = 0; xx < 4; xx++)
                 {
-                    if (Block.BLOCK_SHAPE[now.blockNum, now.turn, yy, xx])
+                    if (Block.BLOCK_SHAPE[now.shape, now.turn, yy, xx])
                     {
                         
                         if ((now.x + xx < 0) || (now.x + xx >= BX) || (now.y + yy >= BY) || gameBoard[now.y + yy, now.x + xx])
@@ -124,7 +124,7 @@ namespace Tetris201770001
                                 now.MoveLeft();
                                 return true;
                             }
-                            if (now.blockNum == 0 && now.x + 1 < 0)
+                            if (now.shape == 0 && now.x + 1 < 0)
                             {
                                 now.MoveRight();
                                 if (CanRight())
@@ -161,7 +161,7 @@ namespace Tetris201770001
             {
                 for (int xx = 0; xx < 4; xx++)
                 {
-                    if (Block.BLOCK_SHAPE[now.blockNum, now.turn, yy, xx])
+                    if (Block.BLOCK_SHAPE[now.shape, now.turn, yy, xx])
                     {
                         if (now.x + xx - 1 < 0|| (now.y + yy >= BY) || gameBoard[now.y + yy, now.x + xx - 1]) return false;
                     }
@@ -175,7 +175,7 @@ namespace Tetris201770001
             {
                 for (int xx = 0; xx < 4; xx++)
                 {
-                    if (Block.BLOCK_SHAPE[now.blockNum, now.turn, yy, xx])
+                    if (Block.BLOCK_SHAPE[now.shape, now.turn, yy, xx])
                     {
                         if (now.x + xx + 1 >= BX || (now.y + yy >= BY) || gameBoard[now.y + yy, now.x + xx + 1]) return false;
                     }
@@ -189,7 +189,7 @@ namespace Tetris201770001
             {
                 for (int xx = 0; xx < 4; xx++)
                 {
-                    if(Block.BLOCK_SHAPE[now.blockNum, now.turn, yy, xx])
+                    if(Block.BLOCK_SHAPE[now.shape, now.turn, yy, xx])
                     {
                         if ((now.y + yy + 1 > BY - 1) || gameBoard[now.y + yy + 1, now.x + xx])  return false;
                     }
@@ -205,7 +205,7 @@ namespace Tetris201770001
             {
                 for (int xx = 0; xx < 4; xx++)
                 {
-                    if (Block.BLOCK_SHAPE[now.blockNum, now.turn, yy, xx])
+                    if (Block.BLOCK_SHAPE[now.shape, now.turn, yy, xx])
                     {
                         if (now.x + xx < 0 || now.x + xx >= BX || now.y + yy - 1 < 0 || (now.y + yy >= BY) 
                             || gameBoard[now.y + yy, now.x + xx]) return false;
@@ -222,23 +222,23 @@ namespace Tetris201770001
 
             if (holdBlockNum == -1)
             {
-                holdBlockNum = now.blockNum;
+                holdBlockNum = now.shape;
                 SetNewBlock();
                 return;
             }
             int temp = holdBlockNum;
-            holdBlockNum = now.blockNum;
+            holdBlockNum = now.shape;
             now.NewBlock();
-            now.blockNum = temp;
+            now.shape = temp;
 
             return;
         }
         public void SetNewBlock()
         {
             now.NewBlock();
-            now.blockNum = nextBlocks[0].blockNum;
-            nextBlocks[0].blockNum = nextBlocks[1].blockNum;
-            nextBlocks[1].blockNum = nextBlocks[2].blockNum;
+            now.shape = nextBlocks[0].shape;
+            nextBlocks[0].shape = nextBlocks[1].shape;
+            nextBlocks[1].shape = nextBlocks[2].shape;
             nextBlocks[2].NewBlock();
         }
         public int GetFloorDistance()
@@ -250,7 +250,7 @@ namespace Tetris201770001
                 {
                     for (int xx = 0; xx < 4; xx++)
                     {
-                        if (Block.BLOCK_SHAPE[now.blockNum, now.turn, yy, xx])
+                        if (Block.BLOCK_SHAPE[now.shape, now.turn, yy, xx])
                         {
                             if (now.y + yy < 0) return 0;
                             if ((now.y + yy + dis > BY - 1) || gameBoard[now.y + yy + dis, now.x + xx]) return dis - 1;
@@ -301,10 +301,10 @@ namespace Tetris201770001
         public bool BlockCheck(int yy, int xx, int block)
         {
             switch (block) {
-                case -1: return Block.BLOCK_SHAPE[now.blockNum, now.turn, yy, xx];
-                case 0: return Block.BLOCK_SHAPE[nextBlocks[0].blockNum, 0, yy, xx];
-                case 1: return Block.BLOCK_SHAPE[nextBlocks[1].blockNum, 0, yy, xx];
-                case 2: return Block.BLOCK_SHAPE[nextBlocks[2].blockNum, 0, yy, xx];
+                case -1: return Block.BLOCK_SHAPE[now.shape, now.turn, yy, xx];
+                case 0: return Block.BLOCK_SHAPE[nextBlocks[0].shape, 0, yy, xx];
+                case 1: return Block.BLOCK_SHAPE[nextBlocks[1].shape, 0, yy, xx];
+                case 2: return Block.BLOCK_SHAPE[nextBlocks[2].shape, 0, yy, xx];
                 case 3: return Block.BLOCK_SHAPE[holdBlockNum, 0, yy, xx];
                 default: return false;
             }
