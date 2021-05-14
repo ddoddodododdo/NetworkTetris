@@ -46,47 +46,49 @@ namespace Tetris201770001
 
         public bool CheckGameOver()
         {
-            now.MoveReturn();
-            if (!CanTurn()) // 게임오버
-            {
-                return true;
-            }
-            return false;
+            if (CanHere()) return false;
+
+            return true;
         }
 
 
         #region Move()
         public void MoveDrop()
         {
-            while (MoveDown()) ;
+            while (MoveDown());
         }
         public void MoveTurn()
         {
-            if(!CanTurn())
-                now.MoveReturn();
+            now.MoveTurn();
+            if (CanHere()) return;
+            if (MoveLeft()) return;
+            if (MoveRight()) return;
+            if (MoveUp()) return;
+            now.MoveReturn();
         }
-        public void MoveLeft()
+        public bool MoveLeft()
         {
-            if (CanLeft())
-            {
-                now.MoveLeft();
-            }
+            now.MoveLeft();
+            if (CanHere()) return true;
+
+            now.MoveRight();
+            return false;
         }
-        public void MoveRight()
+        public bool MoveRight()
         {
-            if (CanRight())
-            {
-                now.MoveRight();
-            }
+            now.MoveRight();
+            if (CanHere()) return true;
+
+            now.MoveLeft();
+            return false;
         }
         public bool MoveDown()
         {
-            if (CanDown())  
-            {
-                now.MoveDown();
-                return true;
-            }
-
+            now.MoveDown();
+            if (CanHere()) return true;
+            
+            now.MoveUp();
+            
             for (int yy = 0; yy < 4; yy++) //안내려가질때 현재 자리에 블럭 채우기
             {
                 for (int xx = 0; xx < 4; xx++)
@@ -103,118 +105,37 @@ namespace Tetris201770001
             SetNewBlock(); // 땅에 닿으면 새로운블럭 호출
             return false;
         }
-        #endregion
 
-        #region Can()
-        private bool CanTurn()
+        public bool MoveUp()
         {
-            now.MoveTurn();
-            for (int yy = 0; yy < 4; yy++)
-            {
-                for (int xx = 0; xx < 4; xx++)
-                {
-                    if (Block.BLOCK_SHAPE[now.shape, now.turn, yy, xx])
-                    {
-                        
-                        if ((now.x + xx < 0) || (now.x + xx >= BX) || (now.y + yy >= BY) || gameBoard[now.y + yy, now.x + xx])
-                        {
+            now.MoveUp();
+            if (CanHere()) return true;
 
-                            if (CanLeft())
-                            {
-                                now.MoveLeft();
-                                return true;
-                            }
-                            if (now.shape == 0 && now.x + 1 < 0)
-                            {
-                                now.MoveRight();
-                                if (CanRight())
-                                {
-                                    now.MoveRight();
-                                    return true;
-                                }
-                                now.MoveLeft();
-                            }
-                            else if (CanRight())
-                            {
-                                now.MoveRight();
-                                return true;
-                            }
-                            
-                            if (CanUp())
-                            {
-                                return true;
-                            }
-                            if (CanUp())
-                            {
-                                return true;
-                            }now.y += 2;
-                            return false;
-                        }
-                    }
-                }
-            }
-            return true;
+            now.MoveDown();
+            return false;
         }
-        private bool CanLeft()
-        {
-            for (int yy = 0; yy < 4; yy++)
-            {
-                for (int xx = 0; xx < 4; xx++)
-                {
-                    if (Block.BLOCK_SHAPE[now.shape, now.turn, yy, xx])
-                    {
-                        if (now.x + xx - 1 < 0|| (now.y + yy >= BY) || gameBoard[now.y + yy, now.x + xx - 1]) return false;
-                    }
-                }
-            }
-            return true;
-        }
-        private bool CanRight()
-        {
-            for (int yy = 0; yy < 4; yy++)
-            {
-                for (int xx = 0; xx < 4; xx++)
-                {
-                    if (Block.BLOCK_SHAPE[now.shape, now.turn, yy, xx])
-                    {
-                        if (now.x + xx + 1 >= BX || (now.y + yy >= BY) || gameBoard[now.y + yy, now.x + xx + 1]) return false;
-                    }
-                }
-            }
-            return true;
-        }
-        private bool CanDown()
-        {
-            for (int yy = 0; yy < 4; yy++)
-            {
-                for (int xx = 0; xx < 4; xx++)
-                {
-                    if(Block.BLOCK_SHAPE[now.shape, now.turn, yy, xx])
-                    {
-                        if ((now.y + yy + 1 > BY - 1) || gameBoard[now.y + yy + 1, now.x + xx])  return false;
-                    }
-                }
-            }
 
-            return true;
-        }
-        private bool CanUp()
+        private bool CanHere()
         {
-            now.y--;
+            int blockX;
+            int blockY;
             for (int yy = 0; yy < 4; yy++)
             {
                 for (int xx = 0; xx < 4; xx++)
                 {
                     if (Block.BLOCK_SHAPE[now.shape, now.turn, yy, xx])
                     {
-                        if (now.x + xx < 0 || now.x + xx >= BX || now.y + yy - 1 < 0 || (now.y + yy >= BY) 
-                            || gameBoard[now.y + yy, now.x + xx]) return false;
+                        blockX = now.x + xx;
+                        blockY = now.y + yy;
+                        if (blockX < 0 || BX <= blockX || blockY < 0 || BY <= blockY || gameBoard[blockY, blockX]) return false;
                     }
                 }
             }
             return true;
         }
         #endregion
+
+
 
         public void UseHold()
         {
@@ -246,16 +167,11 @@ namespace Tetris201770001
             int dis = 0;
             while (++dis < BY)
             {
-                for (int yy = 0; yy < 4; yy++)
+                now.y++;
+                if (!CanHere())
                 {
-                    for (int xx = 0; xx < 4; xx++)
-                    {
-                        if (Block.BLOCK_SHAPE[now.shape, now.turn, yy, xx])
-                        {
-                            if (now.y + yy < 0) return 0;
-                            if ((now.y + yy + dis > BY - 1) || gameBoard[now.y + yy + dis, now.x + xx]) return dis - 1;
-                        }
-                    }
+                    now.y -= dis;
+                    return dis - 1;
                 }
             }
             return dis - 1;

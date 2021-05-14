@@ -374,27 +374,19 @@ namespace Tetris201770001
             {
                 switch (e.KeyCode)
                 {
+                    case Keys.Down: myGame.MoveDown(); break;
+                    case Keys.Right: myGame.MoveRight(); break;
+                    case Keys.Left: myGame.MoveLeft(); break;
+                    case Keys.Space: myGame.MoveDrop(); break;
                     case Keys.ShiftKey:
                         if(!putShift) myGame.UseHold();
                         putShift = true;
-                        break;
-                    case Keys.Down:
-                        if (!myGame.MoveDown()) CheckGameOver();
-                        break;
-                    case Keys.Right:
-                        myGame.MoveRight();
-                        break;
-                    case Keys.Left:
-                        myGame.MoveLeft();
                         break;
                     case Keys.Up:
                         if(!putUp) myGame.MoveTurn();
                         putUp = true;
                         break;
-                    case Keys.Space:
-                        myGame.MoveDrop();
-                        CheckGameOver();
-                        break;
+                    
                     case Keys.D1:
                     case Keys.NumPad1:
                         if (networkStatus != NetworkStatus.notConnected)
@@ -403,7 +395,10 @@ namespace Tetris201770001
                             statusTextBox.AppendText("나: 개못함 ㅋㅋ\r\n");
                         }
                         break;
+
+                    
                 }
+                CheckGameOver();
                 Invalidate();
             }
         }

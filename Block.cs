@@ -30,10 +30,10 @@ namespace Tetris201770001
             x = Game.BX/2 - 2;
             y = 0;
             turn = 0;
-            shape = GetBag7();
+            shape = GetBlockShape();
         }
 
-        private int GetBag7()
+        private int GetBlockShape()
         {
             if (bagIndex > bag7.Length - 1) {
                 bagIndex = 0;
@@ -68,6 +68,12 @@ namespace Tetris201770001
         {
             y++;
         }
+
+        public void MoveUp()
+        {
+            y--;
+        }
+
         public void MoveTurn()
         {
             turn = (turn + 1) % 4;
