@@ -486,29 +486,19 @@ namespace Tetris201770001
 
         private void OnServer()
         {
-            
+            networkStatus = NetworkStatus.Server;
             ipAdress = Dns.Resolve(Dns.GetHostName()).AddressList[0];
             IPEndPoint endPoint = new IPEndPoint(ipAdress, port);
             ipTextBox.SelectedText = ipAdress.ToString();
             statusTextBox.AppendText("서버를 열었습니다. \r\n");
 
-            
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             socket.Bind(endPoint);
             socket.Listen(10);
-            try
-            {
-                socket = socket.Accept();
-            }catch(Exception e) 
-            {
-                statusTextBox.AppendText("연결 실패.\r\n");
-                return;
-            }
+            socket = socket.Accept();
 
-            networkStatus = NetworkStatus.Server;
             receiveThread = new Thread(new ThreadStart(ReceiveFromNetwork));
             receiveThread.Start();
-
             statusTextBox.AppendText("클라이언트와 연결.\r\n");
             ipTextBox.Text = "";
             OffController();
@@ -528,7 +518,7 @@ namespace Tetris201770001
                 return;
             }
 
-            OffController();
+            
             networkStatus = NetworkStatus.Client;
             statusTextBox.AppendText("서버에 연결됐습니다. \r\n");
             receiveThread = new Thread(new ThreadStart(ReceiveFromNetwork));
@@ -538,6 +528,8 @@ namespace Tetris201770001
 
         private void ReceiveFromNetwork()
         {
+
+            
             while (networkStatus != NetworkStatus.notConnected)
             {
                 int dataLength = socket.Receive(receiveData);

@@ -32,14 +32,12 @@ namespace Tetris201770001
             Reset();
         }
 
-        public void Reset()
+        public  void Reset()
         {
             now.NewBlock();
             for (int i = 0; i < nextBlocks.Length; i++) nextBlocks[i] = new Block();
             for (int i = 0; i < nextBlocks.Length; i++) SetNewBlock();
-            for (int i = 0; i < BY; i++)
-                for (int j = 0; j < BX; j++)
-                    gameBoard[i, j] = false;
+            for (int i = 0; i < BY; i++) for (int j = 0; j < BX; j++) gameBoard[i, j] = false;
             gameScore = 0;
             holdBlockNum = -1;
         }
@@ -47,74 +45,11 @@ namespace Tetris201770001
         public bool CheckGameOver()
         {
             if (CanHere()) return false;
-
             return true;
         }
 
 
         #region Move()
-        public void MoveDrop()
-        {
-            while (MoveDown());
-        }
-        public void MoveTurn()
-        {
-            now.MoveTurn();
-            if (CanHere()) return;
-            if (MoveLeft()) return;
-            if (MoveRight()) return;
-            if (MoveUp()) return;
-            now.MoveReturn();
-        }
-        public bool MoveLeft()
-        {
-            now.MoveLeft();
-            if (CanHere()) return true;
-
-            now.MoveRight();
-            return false;
-        }
-        public bool MoveRight()
-        {
-            now.MoveRight();
-            if (CanHere()) return true;
-
-            now.MoveLeft();
-            return false;
-        }
-        public bool MoveDown()
-        {
-            now.MoveDown();
-            if (CanHere()) return true;
-            
-            now.MoveUp();
-            
-            for (int yy = 0; yy < 4; yy++) //안내려가질때 현재 자리에 블럭 채우기
-            {
-                for (int xx = 0; xx < 4; xx++)
-                {
-                    if (Block.BLOCK_SHAPE[now.shape, now.turn, yy, xx])
-                    {
-                        gameBoard[now.y + yy, now.x + xx] = true;
-                        gameColorBoard[now.y + yy, now.x + xx] = now.shape;
-                    }
-                }
-            }
-            gameScore += 4;
-            CheckFullLine();
-            SetNewBlock(); // 땅에 닿으면 새로운블럭 호출
-            return false;
-        }
-
-        public bool MoveUp()
-        {
-            now.MoveUp();
-            if (CanHere()) return true;
-
-            now.MoveDown();
-            return false;
-        }
-
         private bool CanHere()
         {
             int blockX;
@@ -133,9 +68,78 @@ namespace Tetris201770001
             }
             return true;
         }
+
+        public bool MoveLeft()
+        {
+            now.MoveLeft();
+            if (CanHere()) return true;
+
+            now.MoveRight();
+            return false;
+        }
+
+        public bool MoveRight()
+        {
+            now.MoveRight();
+            if (CanHere()) return true;
+
+            now.MoveLeft();
+            return false;
+        }
+
+        public bool MoveUp()
+        {
+            now.MoveUp();
+            if (CanHere()) return true;
+
+            now.MoveDown();
+            return false;
+        }
+        public void MoveTurn()
+        {
+            now.MoveTurn();
+            if (CanHere()) return;
+            if (MoveLeft()) return;
+            if (MoveRight()) return;
+            if (MoveUp()) return;
+            now.MoveReturn();
+        }
+        
+        public bool MoveDown()
+        {
+            now.MoveDown();
+            if (CanHere()) return true;
+            now.MoveUp();
+
+            //땅에 닿으면
+            FillLandBlock();
+            gameScore += 4;
+            CheckFullLine();
+            SetNewBlock(); 
+            return false;
+        }
+
+        public void MoveDrop()
+        {
+            while (MoveDown()) ;
+        }
+
         #endregion
 
-
+        private void FillLandBlock()
+        {
+            for (int yy = 0; yy < 4; yy++) //안내려가질때 현재 자리에 블럭 채우기
+            {
+                for (int xx = 0; xx < 4; xx++)
+                {
+                    if (Block.BLOCK_SHAPE[now.shape, now.turn, yy, xx])
+                    {
+                        gameBoard[now.y + yy, now.x + xx] = true;
+                        gameColorBoard[now.y + yy, now.x + xx] = now.shape;
+                    }
+                }
+            }
+        }
 
         public void UseHold()
         {
@@ -154,6 +158,7 @@ namespace Tetris201770001
 
             return;
         }
+
         public void SetNewBlock()
         {
             now.NewBlock();
@@ -162,6 +167,7 @@ namespace Tetris201770001
             nextBlocks[1].shape = nextBlocks[2].shape;
             nextBlocks[2].NewBlock();
         }
+
         public int GetFloorDistance()
         {
             int dis = 0;
@@ -176,6 +182,7 @@ namespace Tetris201770001
             }
             return dis - 1;
         }
+
         public bool CheckFullLine()
         {
             bool checker = false;
@@ -196,6 +203,7 @@ namespace Tetris201770001
             }
             return checker;
         }
+
         public void EraseBlock(int yy)
         {
             for (; yy >= 0; yy--)
@@ -214,6 +222,7 @@ namespace Tetris201770001
                 }
             }
         }
+
         public bool BlockCheck(int yy, int xx, int block)
         {
             switch (block) {
@@ -225,6 +234,7 @@ namespace Tetris201770001
                 default: return false;
             }
         }
+
         public Rectangle GetRect(int yy, int xx)
         {
             return new Rectangle((now.x + xx) * CELL_SIZE, (now.y + yy) * CELL_SIZE, CELL_SIZE, CELL_SIZE);
