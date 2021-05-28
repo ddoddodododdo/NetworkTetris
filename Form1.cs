@@ -389,7 +389,7 @@ namespace Tetris201770001
                         if (networkStatus != NetworkStatus.notConnected)
                         {
                             SendToNetwork("LOL");
-                            statusTextBox.AppendText("나: 개못함 ㅋㅋ\r\n");
+                            statusTextBox.AppendText("나: 쉽네요ㅋㅋ\r\n");
                         }
                         break;
 
@@ -547,7 +547,7 @@ namespace Tetris201770001
                 }
                 else if (encodingData.Equals("LOL"))
                 {
-                    statusTextBox.AppendText("상대: 쉽네 ㅋㅋ\r\n");
+                    statusTextBox.AppendText("상대: 쉽네요 ㅋㅋ\r\n");
                 }
                 else
                 {
