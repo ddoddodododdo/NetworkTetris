@@ -22,10 +22,10 @@ namespace Tetris201770001
         public Block()
         {
             ResetBag();
-            NewBlock();
+            ResetBlock();
         }
 
-        public void NewBlock()
+        public void ResetBlock()
         {
             x = Game.BX/2 - 2;
             y = 0;
@@ -42,7 +42,7 @@ namespace Tetris201770001
             return bag7[bagIndex++];
         }
 
-        public void ResetBag()
+        private void ResetBag()
         {
             int num, temp;
             for (int i = 0; i < bag7.Length; i++) bag7[i] = i; //블럭 넣고

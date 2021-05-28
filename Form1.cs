@@ -23,7 +23,6 @@ namespace Tetris201770001
     public partial class NetworkTetris : Form
     {
         Game myGame;
-        Game playerGame;
 
         Socket socket;
         Thread receiveThread;
@@ -51,7 +50,6 @@ namespace Tetris201770001
         Rectangle startButtonRect;
         Rectangle quitButtonRect;
 
-
         NetworkStatus networkStatus = NetworkStatus.notConnected;
         SolidBrush[] blockBrushes = new SolidBrush[8];
         SolidBrush backgroundBrush = new SolidBrush(Color.FromArgb(255, 30, 30, 40));
@@ -72,7 +70,6 @@ namespace Tetris201770001
         private void Reset()
         {
             myGame = new Game();
-            playerGame = new Game();
             attackPoint = 150;
             downTickInterval = 600;
             isPlay = false;
@@ -486,7 +483,6 @@ namespace Tetris201770001
 
         private void OnServer()
         {
-            networkStatus = NetworkStatus.Server;
             ipAdress = Dns.Resolve(Dns.GetHostName()).AddressList[0];
             IPEndPoint endPoint = new IPEndPoint(ipAdress, port);
             ipTextBox.SelectedText = ipAdress.ToString();
@@ -497,11 +493,12 @@ namespace Tetris201770001
             socket.Listen(10);
             socket = socket.Accept();
 
+            OffController();
+            networkStatus = NetworkStatus.Server;
             receiveThread = new Thread(new ThreadStart(ReceiveFromNetwork));
             receiveThread.Start();
             statusTextBox.AppendText("클라이언트와 연결.\r\n");
             ipTextBox.Text = "";
-            OffController();
         }
 
         private void ConnectToServer()
@@ -518,18 +515,16 @@ namespace Tetris201770001
                 return;
             }
 
-            
+            OffController();
             networkStatus = NetworkStatus.Client;
-            statusTextBox.AppendText("서버에 연결됐습니다. \r\n");
             receiveThread = new Thread(new ThreadStart(ReceiveFromNetwork));
             receiveThread.Start();
+            statusTextBox.AppendText("서버에 연결됐습니다. \r\n");
             ipTextBox.Text = "";
         }
 
         private void ReceiveFromNetwork()
         {
-
-            
             while (networkStatus != NetworkStatus.notConnected)
             {
                 int dataLength = socket.Receive(receiveData);
@@ -552,7 +547,7 @@ namespace Tetris201770001
                 }
                 else if (encodingData.Equals("LOL"))
                 {
-                    statusTextBox.AppendText("상대: 개못함 ㅋㅋ\r\n");
+                    statusTextBox.AppendText("상대: 쉽네 ㅋㅋ\r\n");
                 }
                 else
                 {
@@ -570,6 +565,7 @@ namespace Tetris201770001
 
             }
         }
+
         private void SendToNetwork(bool[,] gameBoard)
         {
             string data = "";

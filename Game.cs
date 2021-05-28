@@ -34,7 +34,7 @@ namespace Tetris201770001
 
         public  void Reset()
         {
-            now.NewBlock();
+            now.ResetBlock();
             for (int i = 0; i < nextBlocks.Length; i++) nextBlocks[i] = new Block();
             for (int i = 0; i < nextBlocks.Length; i++) SetNewBlock();
             for (int i = 0; i < BY; i++) for (int j = 0; j < BX; j++) gameBoard[i, j] = false;
@@ -145,7 +145,7 @@ namespace Tetris201770001
         {
             gameScore = (gameScore >= 100) ? gameScore - 100 : 0;
 
-            if (holdBlockNum == -1)
+            if (holdBlockNum == -1) // Hold 해준 블럭이 없을 경우
             {
                 holdBlockNum = now.shape;
                 SetNewBlock();
@@ -153,7 +153,7 @@ namespace Tetris201770001
             }
             int temp = holdBlockNum;
             holdBlockNum = now.shape;
-            now.NewBlock();
+            now.ResetBlock();
             now.shape = temp;
 
             return;
@@ -161,11 +161,11 @@ namespace Tetris201770001
 
         public void SetNewBlock()
         {
-            now.NewBlock();
+            now.ResetBlock();
             now.shape = nextBlocks[0].shape;
             nextBlocks[0].shape = nextBlocks[1].shape;
             nextBlocks[1].shape = nextBlocks[2].shape;
-            nextBlocks[2].NewBlock();
+            nextBlocks[2].ResetBlock();
         }
 
         public int GetFloorDistance()
