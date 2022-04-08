@@ -157,14 +157,14 @@ namespace Tetris201770001
                 },
                 {
                     {false, false, false, false },
-                    {false, true,  true,  true },
-                    {false, false, false, true },
+                    {false, true,  true,  true  },
+                    {false, false, false, true  },
                     {false, false, false, false }
                 },
                 {
-                    {false, false, false, true },
-                    {false, false, false, true },
-                    {false, false, true,  true },
+                    {false, false, false, true  },
+                    {false, false, false, true  },
+                    {false, false, true,  true  },
                     {false, false, false, false }
                 }
             },
@@ -173,26 +173,26 @@ namespace Tetris201770001
             {         //    ㅁ
                 {     //ㅁㅁㅁ
                     {false, false, false, false },
-                    {false, false, false, true },
-                    {false, true, true, true },
+                    {false, false, false, true  },
+                    {false, true,  true,  true  },
                     {false, false, false, false }
                 },
                 {
                     {false, false, true, false },
                     {false, false, true, false },
-                    {false, false, true, true },
+                    {false, false, true,  true },
                     {false, false, false, false }
                 },
                 {
                     {false, false, false, false },
-                    {false, true, true, true },
-                    {false, true, false, false },
+                    {false, true,  true,  true  },
+                    {false, true,  false, false },
                     {false, false, false, false }
                 },
                 {
-                    {false, true, true, false },
-                    {false, false, true, false },
-                    {false, false, true, false },
+                    {false, true,  true,  false },
+                    {false, false, true,  false },
+                    {false, false, true,  false },
                     {false, false, false, false }
                 }
             },
@@ -200,21 +200,21 @@ namespace Tetris201770001
                          //   ㅁ
             {            // ㅁㅁ
                 {        // ㅁ
-                    {false, false, true, false },
-                    {false, true, true, false },
-                    {false, true, false, false },
+                    {false, false, true,  false },
+                    {false, true,  true,  false },
+                    {false, true,  false, false },
                     {false, false, false, false }
                 },
                 {
-                    {false, true,  true,  false},
-                    {false, false, true,  true },
-                    {false, false, false, false},
-                    {false, false, false, false}
+                    {false, true,  true,  false },
+                    {false, false, true,  true  },
+                    {false, false, false, false },
+                    {false, false, false, false }
                 },
                 {
-                    {false, false, true, false },
-                    {false, true, true, false },
-                    {false, true, false, false },
+                    {false, false, true,  false },
+                    {false, true,  true,  false },
+                    {false, true,  false, false },
                     {false, false, false, false }
                 },
                 {

@@ -1,0 +1,9 @@
+D:\homework\csProject\Network\NetworkTetris_Ver0602\bin\Release\Tetris201770001.exe.config
+D:\homework\csProject\Network\NetworkTetris_Ver0602\bin\Release\Tetris201770001.exe
+D:\homework\csProject\Network\NetworkTetris_Ver0602\bin\Release\Tetris201770001.pdb
+D:\homework\csProject\Network\NetworkTetris_Ver0602\obj\Release\Tetris201770001.NetworkTetris.resources
+D:\homework\csProject\Network\NetworkTetris_Ver0602\obj\Release\Tetris201770001.Properties.Resources.resources
+D:\homework\csProject\Network\NetworkTetris_Ver0602\obj\Release\NetworkTetris.csproj.GenerateResource.cache
+D:\homework\csProject\Network\NetworkTetris_Ver0602\obj\Release\NetworkTetris.csproj.CoreCompileInputs.cache
+D:\homework\csProject\Network\NetworkTetris_Ver0602\obj\Release\Tetris201770001.exe
+D:\homework\csProject\Network\NetworkTetris_Ver0602\obj\Release\Tetris201770001.pdb

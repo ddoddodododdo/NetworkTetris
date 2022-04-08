@@ -32,7 +32,7 @@ namespace Tetris201770001
             Reset();
         }
 
-        public  void Reset()
+        public void Reset()
         {
             now.ResetBlock();
             for (int i = 0; i < nextBlocks.Length; i++) nextBlocks[i] = new Block();
@@ -44,8 +44,7 @@ namespace Tetris201770001
 
         public bool CheckGameOver()
         {
-            if (CanHere()) return false;
-            return true;
+            return !CanHere();
         }
 
 
@@ -244,8 +243,8 @@ namespace Tetris201770001
         {
             int toothless = rand.Next(BX);
 
-           for(int yy = 0; yy < BY; yy++)
-           {
+            for(int yy = 0; yy < BY; yy++)
+            {
                 for(int xx = 0; xx < BX; xx++)
                 {
                     if (yy == BY - 1)
@@ -264,7 +263,7 @@ namespace Tetris201770001
                         gameColorBoard[yy, xx] = gameColorBoard[yy + 1, xx];
                     }
                 }
-           }
+            }
         }
     }
 }

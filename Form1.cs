@@ -476,14 +476,17 @@ namespace Tetris201770001
 
         private void OffController()
         {
+            ipTextBox.Enabled = false;
             onServerButton.Enabled = false;
             clientButton.Enabled = false;
-            ipTextBox.Enabled = false;
+
         }
+
 
         private void OnServer()
         {
             ipAdress = Dns.Resolve(Dns.GetHostName()).AddressList[0];
+
             IPEndPoint endPoint = new IPEndPoint(ipAdress, port);
             ipTextBox.SelectedText = ipAdress.ToString();
             statusTextBox.AppendText("서버를 열었습니다. \r\n");
@@ -567,7 +570,7 @@ namespace Tetris201770001
         }
 
         private void SendToNetwork(bool[,] gameBoard)
-        {
+        {            
             string data = "";
             for(int y = 0; y < Game.BY; y++)
             {
@@ -578,13 +581,13 @@ namespace Tetris201770001
                 }
             }
 
-            byte[] sendData = Encoding.UTF8.GetBytes(data);
-            socket.Send(sendData);
+            SendToNetwork(data);
         }
 
         private void SendToNetwork(String data)
         {
             byte[] sendData = Encoding.UTF8.GetBytes(data);
+            
             socket.Send(sendData);
         }
 
